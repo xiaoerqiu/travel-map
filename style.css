@@ -111,6 +111,17 @@ html {
 }
 
 /* ======== 地图 Marker (点标记) 自定义样式 ======== */
+.marker-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    /* 初始进场动画状态由 wrapper 来承担 */
+    transform: scale(0);
+    opacity: 0;
+    animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 100;
+}
+
 .custom-marker {
     width: 16px;
     height: 16px;
@@ -121,19 +132,45 @@ html {
     cursor: pointer;
     transition: all var(--transition-fast);
     transform-origin: center;
-    /* 初始进场动画状态 */
-    transform: scale(0);
-    opacity: 0;
-    animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    flex-shrink: 0;
 }
 
-.custom-marker:hover,
-.custom-marker.selected {
-    transform: scale(1.4) !important;
+/* 标注地名的文本标签 */
+.marker-label {
+    margin-left: 8px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    pointer-events: none;
+    /* 让点击穿透给 wrapper 上的事件判断，也可保留原样 */
+    transition: all var(--transition-fast);
+}
+
+.marker-wrapper:hover {
+    z-index: 999;
+}
+
+.marker-wrapper:hover .custom-marker,
+.marker-wrapper.selected .custom-marker {
+    transform: scale(1.4);
     background-color: #ef4444;
     /* 选中时变成醒目红色 */
     box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
-    z-index: 999;
+}
+
+.marker-wrapper:hover .marker-label,
+.marker-wrapper.selected .marker-label {
+    background: #ef4444cc;
+    border-color: #ffb3b3;
+    transform: translateX(4px);
 }
 
 @keyframes popIn {
