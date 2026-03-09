@@ -177,6 +177,14 @@ function openInfoWindow(marker, data) {
     const desc = clone.querySelector('.card-desc');
     const closeBtn = clone.querySelector('.close-btn');
 
+    // 当网络图片加载失败时，生成一个美观的 SVG 作为占位降级
+    img.onerror = function () {
+        this.onerror = null; // 防止无限回退
+        const fallbackText = encodeURIComponent(data.name.split('·')[1] || data.name);
+        // 生成深色背景与白色文字的 SVG Base64 URI
+        this.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="800" height="600" fill="%231e293b"/><text x="50%" y="50%" fill="%23ffffff" font-size="36" font-family="sans-serif" font-weight="bold" text-anchor="middle" dominant-baseline="middle">${fallbackText}</text></svg>`;
+    };
+
     img.src = data.image;
     title.textContent = data.name;
     desc.textContent = data.desc;
